@@ -1,0 +1,30 @@
+WeKnora 本机 Docker 部署（2026-10-12）
+
+网页：http://localhost/login
+API：http://localhost:8080
+健康检查：http://localhost:8080/health
+网页与 API 仅绑定 127.0.0.1；数据库、Redis、docreader 没有宿主机端口映射。
+本次应用镜像为 latest 标签，对应 v0.8.2；镜像 ID 与 digest 见 verification.json。
+
+配置文件：仓库根目录 .env（Git 已忽略），含本次随机生成的数据库、Redis、JWT 与 AES 密钥。
+默认使用 PostgreSQL 检索与本地文件存储；关闭未配置的 Langfuse，未启用可选沙箱/图谱服务。
+docker-compose.override.yml 使用项目专属 WEKNORA_LOG_FORMAT，避免宿主机 LOG_FORMAT=json 影响日志。
+密钥应随持久数据一起备份，升级时保留 .env 中的 SYSTEM_AES_KEY。
+
+在 D:\code\CYG\Github\WeKnora 下执行：
+启动：docker compose up -d
+状态：docker compose ps
+日志：docker compose logs --tail 100 app
+停止：docker compose stop
+复核：python -B qishu/deployment/verify_docker.py
+
+首次使用：
+1. 打开网页，点击“创建账户”，使用自己的邮箱和密码注册并登录。
+2. 设置 → 模型 → 添加模型，先添加对话模型，再添加向量模型。
+3. 选择 API 来源与厂商，填写厂商提供的模型名、Base URL 和 API Key；测试连接后保存。
+4. 若使用宿主机 Ollama，来源选 Ollama，地址填 http://host.docker.internal:11434。
+5. 创建知识库，在初始化向导中选择对话与向量模型。向量维度按实际模型填写；首次可关闭重排、图谱、图片理解和问题生成。
+6. 上传小型文本/PDF 文件，等待解析完成；选择该知识库提问，检查回答与引用。
+
+服务与登录页已验证，包含真实 DOCX gRPC 解析测试。尚未配置模型凭据，因此未验证模型连接、向量入库及问答生成。
+详细模型说明：website-docs/03-features/06-models.md。

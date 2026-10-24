@@ -1,0 +1,6 @@
+# The host may export LOG_FORMAT=json for unrelated tooling. WeKnora expects
+# a placeholder template, so use a project-specific variable for this setting.
+services:
+  app:
+    environment:
+      LOG_FORMAT: "${WEKNORA_LOG_FORMAT:-%d [%level] %logger %msg}"
