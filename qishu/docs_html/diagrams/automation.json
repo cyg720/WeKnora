@@ -1,0 +1,146 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "定时任务从配置到结果交付",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "animation": "trace",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "backend": {
+          "label": "应用服务"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "request",
+      "label": "配置入口"
+    },
+    {
+      "id": "prepare",
+      "label": "验证与持久化"
+    },
+    {
+      "id": "runtime",
+      "label": "调度与运行"
+    }
+  ],
+  "mainPath": [
+    "request",
+    "config",
+    "tools",
+    "model",
+    "decode",
+    "execute"
+  ],
+  "nodes": [
+    {
+      "id": "request",
+      "lane": "request",
+      "col": 0,
+      "type": "security",
+      "label": "管理任务",
+      "sublabel": "AutomationHandler",
+      "width": 146
+    },
+    {
+      "id": "config",
+      "lane": "prepare",
+      "col": 1,
+      "type": "backend",
+      "label": "校验触发器",
+      "sublabel": "trigger / timezone",
+      "width": 146
+    },
+    {
+      "id": "tools",
+      "lane": "prepare",
+      "col": 2,
+      "type": "backend",
+      "label": "保存配置",
+      "sublabel": "AutomationService",
+      "width": 146
+    },
+    {
+      "id": "model",
+      "lane": "runtime",
+      "col": 3,
+      "type": "backend",
+      "label": "调度领取",
+      "sublabel": "database claim",
+      "width": 146
+    },
+    {
+      "id": "decode",
+      "lane": "runtime",
+      "col": 4,
+      "type": "backend",
+      "label": "执行检查",
+      "sublabel": "owner / grants / model",
+      "width": 146
+    },
+    {
+      "id": "execute",
+      "lane": "runtime",
+      "col": 5,
+      "type": "backend",
+      "label": "结果与通知",
+      "sublabel": "history / notifications",
+      "width": 146
+    }
+  ],
+  "edges": [
+    {
+      "from": "request",
+      "to": "config",
+      "label": "触发配置"
+    },
+    {
+      "from": "config",
+      "to": "tools",
+      "label": "有效规则"
+    },
+    {
+      "from": "tools",
+      "to": "model",
+      "label": "到期任务"
+    },
+    {
+      "from": "model",
+      "to": "decode",
+      "label": "领取运行"
+    },
+    {
+      "from": "decode",
+      "to": "execute",
+      "label": "执行结果"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "调度边界",
+      "items": [
+        "多实例以数据库条件更新竞争领取"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "权限边界",
+      "items": [
+        "每轮核对拥有者、模型与授权"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "执行结果",
+      "items": [
+        "可完成、失败或等待人工处理"
+      ]
+    }
+  ]
+}

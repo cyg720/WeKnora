@@ -63,3 +63,19 @@ miniprogram/project.private.config.json
 
 # Locally built BrowserSkill runtime and extension bundles
 /artifacts/browserskill/
+/qishu/docs_html/sources
+
+# 离线源码导览的本地生成产物；提交界面、规格与生成脚本即可重建。
+/qishu/docs_html/data.js
+/qishu/docs_html/history.js
+/qishu/docs_html/manifest.json
+/qishu/docs_html/verification.json
+/qishu/docs_html/visual_review.json
+/qishu/docs_html/evidence/
+/qishu/docs_html/diagrams/*.html
+/qishu/docs_html/diagrams/*.delivery.json
+/qishu/docs_html/diagrams/*.browser-run.json
+/qishu/docs_html/diagrams/*.offline-adapter.json
+/qishu/docs_html/diagrams/*.visual-check.*
+/qishu/deployment/*.png
+/qishu/deployment/*verification.json

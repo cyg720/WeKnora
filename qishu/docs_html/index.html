@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="description" content="WeKnora 离线源码学习工作台：全域功能、调用链、Agent 扩展、架构图与 Git 历史。">
+ <title>WeKnora · 源码学习工作台</title>
+ <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ <aside id="sidebar">
+  <a href="#overview" class="brand"><span class="brand-mark">W</span><span>WeKnora<small>SOURCE ATLAS / 源码图谱</small></span></a>
+  <div class="offline"><span class="dot"></span>本地快照 · 完全离线</div>
+  <nav id="main-nav" aria-label="主导航"></nav>
+  <div class="sidebar-heading">功能清单 <span id="module-count"></span></div>
+  <nav id="feature-nav" aria-label="大模块与功能"></nav>
+  <div class="sidebar-bottom"><span id="revision"></span><a href="#about">索引与覆盖说明 ↗</a></div>
+ </aside>
+ <div class="workspace">
+  <header class="topbar">
+   <button id="menu-toggle" class="icon-button" aria-label="展开或收起导航">☰</button>
+   <div class="crumb"><span>WeKnora</span><span>/</span><strong id="page-label">项目全景</strong></div>
+   <div class="top-actions"><button id="search-open" class="search-trigger">搜索功能、符号、提交 <kbd>Ctrl K</kbd></button><button id="theme-toggle" class="icon-button" aria-label="切换主题">◐</button></div>
+  </header>
+  <main id="content" tabindex="-1"></main>
+  <footer>源码是事实依据 · 图谱帮助建立理解 · 中文译解保留原文供核对</footer>
+ </div>
+ <dialog id="search-dialog"><div class="dialog-head"><strong>全域搜索</strong><button data-close="search-dialog" aria-label="关闭搜索">✕</button></div><input id="global-query" placeholder="例如：AgentQA、Wiki、权限、提交 SHA…" aria-label="全域搜索"><div id="global-results"></div></dialog>
+ <dialog id="source-dialog"><div class="dialog-head"><div><strong id="source-title"></strong><small id="source-meta"></small></div><button data-close="source-dialog" aria-label="关闭源码">✕</button></div><div class="source-toolbar"><select id="source-symbols" aria-label="跳转声明"></select><label>行号 <input id="source-line" type="number" min="1" value="1"></label><button id="source-go">跳转</button><button id="source-copy">复制路径</button><button id="source-bookmark">☆ 收藏</button><a id="source-original" target="_blank" rel="noopener">原文件 ↗</a></div><div class="source-layout"><pre id="source-code" tabindex="0" aria-label="源码内容"></pre><aside id="source-inspector"></aside></div></dialog>
+ <div id="toast" role="status" aria-live="polite"></div>
+ <script>window.SOURCE_CACHE=Object.create(null);</script>
+ <script src="data.js"></script><script src="history.js"></script><script src="app.js"></script>
+</body></html>

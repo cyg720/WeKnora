@@ -1,0 +1,138 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Agent 工具执行主路径",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "animation": "trace"
+  },
+  "lanes": [
+    {
+      "id": "request",
+      "label": "请求与权限"
+    },
+    {
+      "id": "prepare",
+      "label": "配置与工具装配"
+    },
+    {
+      "id": "runtime",
+      "label": "模型推理与执行"
+    }
+  ],
+  "mainPath": [
+    "request",
+    "config",
+    "tools",
+    "model",
+    "decode",
+    "execute"
+  ],
+  "nodes": [
+    {
+      "id": "request",
+      "lane": "request",
+      "col": 0,
+      "type": "security",
+      "label": "请求与权限",
+      "sublabel": "AgentQA",
+      "width": 146
+    },
+    {
+      "id": "config",
+      "lane": "prepare",
+      "col": 1,
+      "type": "backend",
+      "label": "配置与历史",
+      "sublabel": "session service",
+      "width": 146
+    },
+    {
+      "id": "tools",
+      "lane": "prepare",
+      "col": 2,
+      "type": "backend",
+      "label": "装配工具",
+      "sublabel": "CreateAgentEngine",
+      "width": 146
+    },
+    {
+      "id": "model",
+      "lane": "runtime",
+      "col": 3,
+      "type": "external",
+      "label": "模型推理",
+      "sublabel": "ReAct iteration",
+      "width": 146
+    },
+    {
+      "id": "decode",
+      "lane": "runtime",
+      "col": 4,
+      "type": "backend",
+      "label": "还原参数",
+      "sublabel": "modelcontext",
+      "width": 146
+    },
+    {
+      "id": "execute",
+      "lane": "runtime",
+      "col": 5,
+      "type": "backend",
+      "label": "执行与观察",
+      "sublabel": "继续迭代或回答",
+      "width": 146
+    }
+  ],
+  "edges": [
+    {
+      "from": "request",
+      "to": "config",
+      "label": "传入请求"
+    },
+    {
+      "from": "config",
+      "to": "tools",
+      "label": "配置范围"
+    },
+    {
+      "from": "tools",
+      "to": "model",
+      "label": "可用工具"
+    },
+    {
+      "from": "model",
+      "to": "decode",
+      "label": "工具调用"
+    },
+    {
+      "from": "decode",
+      "to": "execute",
+      "label": "持久参数"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "工具可用性",
+      "items": [
+        "白名单、知识能力、运行开关与环境共同决定"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "迭代语义",
+      "items": [
+        "观察后按预算继续 ReAct，或输出最终回答"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "执行与批准边界",
+      "items": [
+        "解码后按 policy、grants 与运行模式检查批准"
+      ]
+    }
+  ]
+}

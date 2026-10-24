@@ -1,0 +1,25 @@
+{
+ "schema_version":1,"diagram_type":"sequence",
+ "meta":{"title":"RAG 问答请求时序","locale":"zh-CN","quality_profile":"showcase","animation":"trace","column_fit":"spread","viewBox":[1000,640]},
+ "participants":[
+  {"id":"web","type":"frontend","label":"Vue 页面","sublabel":"用户会话"},
+  {"id":"handler","type":"security","label":"会话处理器","sublabel":"权限与请求"},
+  {"id":"service","type":"backend","label":"问答服务","sublabel":"KnowledgeQA"},
+  {"id":"pipeline","type":"backend","label":"事件管线","sublabel":"检索与上下文"},
+  {"id":"model","type":"external","label":"聊天模型","sublabel":"流式生成"}
+ ],
+ "messages":[
+  {"from":"web","to":"handler","y":160,"label":"提交 knowledge-chat 请求","variant":"emphasis"},
+  {"from":"handler","to":"service","y":215,"label":"权限通过后传递 QARequest"},
+  {"from":"service","to":"pipeline","y":270,"label":"触发组装后的 RAG 事件序列"},
+  {"from":"pipeline","to":"model","y":325,"label":"发送检索证据与模型上下文"},
+  {"from":"model","to":"pipeline","y":380,"label":"流式文本与模型引用","variant":"return"},
+  {"from":"pipeline","to":"service","y":435,"label":"生成事件与引用结果","variant":"return"},
+  {"from":"service","to":"web","y":490,"label":"经会话流链路输出回答","variant":"return"}
+ ],
+ "cards":[
+  {"dot":"cyan","title":"请求前置条件","items":["会话归属、角色和知识范围在各自边界检查"]},
+  {"dot":"emerald","title":"条件阶段","items":["历史、Web 与数据分析由配置决定是否加入"]},
+  {"dot":"violet","title":"源码证据","items":["qa.go / session_knowledge_qa.go / chat_pipeline"]}
+ ]
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {"title": "WeKnora 源码分层", "locale": "zh-CN", "quality_profile": "showcase", "animation": "trace", "views":[{"id":"request","label":"HTTP 主路径","focus":["web","http","service","repo"],"note":"先看请求、授权、应用服务和持久化。"},{"id":"background","label":"后台解析","focus":["service","queue","parser"],"note":"文档处理通过任务接口分派。"},{"id":"agent-path","label":"Agent 能力","focus":["service","agent","tools"],"note":"AgentQA 进入 ReAct 与外部工具。"}]},
+  "components": [
+    {"id":"web","type":"frontend","label":"Vue 前端","sublabel":"frontend/src","pos":[60,100],"size":[180,76]},
+    {"id":"http","type":"security","label":"HTTP 与权限","sublabel":"router / middleware","pos":[400,100],"size":[180,76]},
+    {"id":"service","type":"backend","label":"应用服务","sublabel":"application/service","pos":[740,100],"size":[180,76]},
+    {"id":"repo","type":"database","label":"仓储与检索","sublabel":"repository / retriever","pos":[1080,100],"size":[180,76]},
+    {"id":"queue","type":"messagebus","label":"任务执行","sublabel":"Asynq / Lite executor","pos":[740,520],"size":[180,76]},
+    {"id":"parser","type":"backend","label":"文档解析","sublabel":"Go engines / docreader","pos":[1080,520],"size":[180,76]},
+    {"id":"agent","type":"backend","label":"ReAct 引擎","sublabel":"internal/agent","pos":[400,520],"size":[180,76]},
+    {"id":"tools","type":"external","label":"工具与沙箱","sublabel":"MCP / Skills / Browser","pos":[60,520],"size":[180,76]}
+  ],
+  "connections": [
+    {"from":"web","to":"http","label":"API 请求"},
+    {"from":"http","to":"service","label":"授权后调用"},
+    {"from":"service","to":"repo","label":"持久化与检索"},
+    {"from":"service","to":"queue","label":"入队","labelDy":24},
+    {"from":"queue","to":"parser","label":"解析任务"},
+    {"from":"service","to":"agent","label":"AgentQA"},
+    {"from":"agent","to":"tools","label":"执行工具"}
+  ],
+  "cards":[
+    {"dot":"cyan","title":"从入口向内读","items":["cmd/server → container → router → handler → service"]},
+    {"dot":"emerald","title":"两条执行路径","items":["RAG 事件管线与 Agent ReAct 共用知识底座"]},
+    {"dot":"rose","title":"权限边界","items":["执行租户切换不授予权限；资源授权由 access 解析"]}
+  ]
+}

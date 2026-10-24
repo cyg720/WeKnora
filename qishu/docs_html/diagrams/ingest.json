@@ -1,0 +1,25 @@
+{
+ "schema_version":1,"diagram_type":"dataflow",
+ "meta":{"title":"知识入库的数据流","locale":"zh-CN","quality_profile":"showcase","animation":"trace","viewBox":[1080,630]},
+ "stages":[{"label":"原始来源"},{"label":"任务接入"},{"label":"文档解析"},{"label":"结构化知识"},{"label":"检索与派生"}],
+ "nodes":[
+  {"id":"document","type":"external","label":"文件 / URL","sublabel":"上传与同步来源","stage":0,"row":0,"width":136},
+  {"id":"job","type":"messagebus","label":"文档处理任务","sublabel":"TaskEnqueuer","stage":1,"row":0,"width":136},
+  {"id":"reader","type":"backend","label":"解析引擎","sublabel":"Go / docreader","stage":2,"row":0,"width":136},
+  {"id":"chunks","type":"database","label":"知识分块","sublabel":"父子结构与来源块","stage":3,"row":0,"width":136},
+  {"id":"index","type":"database","label":"检索索引","sublabel":"BatchIndex","stage":4,"row":0,"width":136},
+  {"id":"post","type":"backend","label":"知识后处理","sublabel":"摘要 / 问题 / Wiki","stage":4,"row":2,"width":136}
+ ],
+ "flows":[
+  {"from":"document","to":"job","label":"文件任务标识"},
+  {"from":"job","to":"reader","label":"解析请求"},
+  {"from":"reader","to":"chunks","label":"文本与来源块"},
+  {"from":"chunks","to":"index","label":"索引内容"},
+  {"from":"index","to":"post","label":"索引后处理","labelDy":24}
+ ],
+ "cards":[
+  {"dot":"cyan","title":"来源与身份","items":["原文件、知识记录、来源块和资源绑定各有身份"]},
+  {"dot":"emerald","title":"按配置执行","items":["索引与后处理能力受知识库配置控制"]},
+  {"dot":"rose","title":"失败与重试","items":["任务状态、资源作用域和处理尝试需再次检查"]}
+ ]
+}

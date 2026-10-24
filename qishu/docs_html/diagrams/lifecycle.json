@@ -1,0 +1,24 @@
+{
+ "schema_version":1,"diagram_type":"lifecycle",
+ "meta":{"title":"文档解析状态与终止路径","locale":"zh-CN","quality_profile":"showcase","animation":"trace","viewBox":[1080,640]},
+ "lanes":[{"id":"main","label":"文档主状态"},{"id":"error","label":"处理失败与重新发起"},{"id":"terminal","label":"取消当前处理"}],
+ "states":[
+  {"id":"pending","type":"start","label":"pending","sublabel":"等待处理","lane":"main","col":0},
+  {"id":"processing","type":"active","label":"processing","sublabel":"解析与索引","lane":"main","col":1},
+  {"id":"finalizing","type":"active","label":"finalizing","sublabel":"主解析后的收尾","lane":"main","col":2},
+  {"id":"completed","type":"success","label":"completed","sublabel":"处理完成","lane":"main","col":3},
+  {"id":"deleting","type":"neutral","label":"deleting","sublabel":"进入删除清理","lane":"main","col":4},
+  {"id":"failed","type":"failure","label":"failed","sublabel":"处理失败","lane":"error","col":0},
+  {"id":"cancelled","type":"failure","label":"cancelled","sublabel":"取消处理","lane":"terminal","col":0}
+ ],
+ "transitions":[
+  {"from":"finalizing","to":"failed","label":"收尾失败","labelDy":24},
+  {"from":"failed","to":"pending","label":"重新发起解析","fromSide":"left","toSide":"top","via":[[320,307],[320,80],[94,80]],"labelAt":[210,65]},
+  {"from":"processing","to":"cancelled","label":"用户取消","fromSide":"bottom","toSide":"left","via":[[248,220],[270,220],[270,479]]}
+ ],
+ "cards":[
+  {"dot":"emerald","title":"主路径","items":["展示典型处理与完成后删除，不代表唯一入口"]},
+  {"dot":"rose","title":"终止检查","items":["deleting / cancelled 阻止旧任务继续写入"]},
+  {"dot":"violet","title":"源码依据","items":["types/knowledge.go 与 knowledge_process.go"]}
+ ]
+}
